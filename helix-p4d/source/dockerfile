@@ -4,15 +4,20 @@ LABEL version="1.0"
 LABEL maintainer="benjamin.hoffman.dev@gmail.com"
 
 # Environement variables should be set in the docker-compose.yml or in a .env file
-ENV P4ROOT="/opt/perforce/servers/master"
-ENV P4PORT=1666
-ENV P4USER="admin"
-ENV P4PASSWD="changeme123"
+#ENV P4ROOT="/opt/perforce/servers/master"
+#ENV P4PORT=1666
+#ENV P4USER="admin"
+#ENV P4PASSWD="changeme123"
 
 # Copy over the run script that will setup the perforce config on the first run
 ADD "run.sh" "${P4ROOT}/run.sh"
 
-# Install p4d on ubuntu based on the official install docs: https://www.perforce.com/manuals/p4sag/Content/P4SAG/install.linux.packages.install.html
+RUN printf "P4PORT: ${P4PORT}"
+RUN printf "P4USER: ${P4USER}"
+RUN printf "P4ROOT: ${P4ROOT}"
+RUN printf "P4PASSWD: ${P4PASSWD}"
+
+# # Install p4d on ubuntu based on the official install docs: https://www.perforce.com/manuals/p4sag/Content/P4SAG/install.linux.packages.install.html
 RUN  apt-get update \
     && apt-get upgrade -y --no-install-recommends --no-install-suggests \
     && apt-get install -y wget gnupg2\

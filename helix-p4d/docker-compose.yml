@@ -1,14 +1,21 @@
 ---
 version: "3"
 services:
-  noip-update-client:
+  helix-p4d-server:
+    # Use the dockerfile in the source folder
     build: ./source
-    dockerfile: dockerfile
-    image: coppit/no-ip
-    container_name: no-ip-update-client
-    # it will create a .conf file in this directory that you can use to confirm/change your settings
+    container_name: helix-p4d-server
+    # Map the perforce root folder to something on this local machine
+    # Set in the .env file, the default is ./root
     volumes:
-      - ./config:/config
+      - ${P4_Local_Root}:${P4ROOT}
     restart: unless-stopped
-    env_file:
-      - p4d.env
+    # Expose the p4 port with the option to change the host port via env
+    ports:
+     - ${External_P4_Port}:${P4PORT}
+    # We have to copy over the env vars set in the .env file to the dockerfile
+    environment:
+      - P4PORT=${P4PORT}
+      - P4ROOT=${P4ROOT}
+      - P4USER=${P4USER}
+      - P4PASSWD=${P4PASSWD}
