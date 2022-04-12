@@ -1,0 +1,14 @@
+---
+version: "3"
+services:
+  noip-update-client:
+    build: ./source
+    dockerfile: dockerfile
+    image: coppit/no-ip
+    container_name: no-ip-update-client
+    # it will create a .conf file in this directory that you can use to confirm/change your settings
+    volumes:
+      - ./config:/config
+    restart: unless-stopped
+    env_file:
+      - p4d.env

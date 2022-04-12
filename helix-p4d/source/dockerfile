@@ -1,0 +1,30 @@
+FROM ubuntu:21.04
+
+LABEL version="1.0"
+LABEL maintainer="benjamin.hoffman.dev@gmail.com"
+
+# Environement variables should be set in the docker-compose.yml or in a .env file
+ENV P4ROOT="/opt/perforce/servers/master"
+ENV P4PORT=1666
+ENV P4USER="admin"
+ENV P4PASSWD="changeme123"
+
+# Copy over the run script that will setup the perforce config on the first run
+ADD "run.sh" "${P4ROOT}/run.sh"
+
+# Install p4d on ubuntu based on the official install docs: https://www.perforce.com/manuals/p4sag/Content/P4SAG/install.linux.packages.install.html
+RUN  apt-get update \
+    && apt-get upgrade -y --no-install-recommends --no-install-suggests \
+    && apt-get install -y wget gnupg2\
+    && rm -rf /var/lib/apt/lists/* \
+    && wget -qO - https://package.perforce.com/perforce.pubkey | apt-key add - \
+    && echo "deb http://package.perforce.com/apt/ubuntu focal release" > /etc/apt/sources.list.d/perforce.list \
+    && apt-get update \
+    && apt-get install helix-p4d -y --no-install-recommends --no-install-suggests  \
+    && chmod 755 "${P4ROOT}/run.sh"
+
+# Start the "Run" script which will actually start helix-p4d
+CMD ["/bin/bash", "-c", "${P4ROOT}/run.sh && tail -f /dev/null"]
+
+# Expose the p4 port that we want
+EXPOSE ${P4PORT}
