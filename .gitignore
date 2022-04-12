@@ -1,1 +1,5 @@
-p4d.env
+# Ignore the env file that would have the default perforce creds in it
+.env
+
+# Ignore the default "root" folder that would have all the perforce files in it
+[Rr]oot/
