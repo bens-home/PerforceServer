@@ -32,3 +32,27 @@ sudo ufw allow 1666 comment "For the perforce server!"
 ## Adding new users
 
 Once the server is up and running, you can connect to it via [P4V](https://www.perforce.com/downloads/helix-visual-client-p4v). Here you can add users via the "Tools > Administration" panel
+
+
+## Configuring your server
+
+To get started using the perforce server for something like a game engine, you probably want to change the type map. A good one for Unreal is: 
+
+```
+Typemap:
+    binary+w //....exe
+    binary+w //....dll
+    binary+w //....lib
+    binary+w //....app
+    binary+w //....dylib
+    binary+w //....stub
+    binary+w //....ipa
+    binary+l //....uasset
+    binary+l //....umap
+    binary+l //....upk
+    binary+l //....udk
+    binary+l //....ubulk
+    binary+wS //..._BuiltData.uasset
+```
+
+See https://www.perforce.com/products/helix-core/configure-helix-core-game-engine#tab-panel-76008 for more.
